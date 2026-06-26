@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fatura - Autolarja ANDI</title>
+    <style>
+        /* VARIABLAT DHE REZOLUCIONI */
+        :root {
+            --ngjyra-primare: #007bff; /* Bluja e biznesit tuaj */
+            --ngjyra-tekst: #2d3748;
+            --ngjyra-gri-lehte: #f8f9fa;
+            --ngjyra-vije: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: var(--ngjyra-tekst);
+            padding: 40px 15px;
+        }
+
+        /* STRUKTURA E FATURËS (Formati A4) */
+        .fatura-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-top: 8px solid var(--ngjyra-primare);
+        }
+
+        /* KREU I FATURËS */
+        .fatura-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--ngjyra-vije);
+            padding-bottom: 20px;
+        }
+
+        .logo-biznesi h1 {
+            font-size: 28px;
+            color: #1a202c;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .logo-biznesi h1 span {
+            color: var(--ngjyra-primare);
+        }
+
+        .logo-biznesi p {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        .titull-fature {
+            text-align: right;
+        }
+
+        .titull-fature h2 {
+            font-size: 32px;
+            color: var(--ngjyra-primare);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .titull-fature p {
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        /* INFORMACIONET DYPALËSHE */
+        .fatura-detaje {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            gap: 20px;
+        }
+
+        .bllok-info {
+            flex: 1;
+        }
+
+        .bllok-info h3 {
+            font-size: 14px;
+            text-transform: uppercase;
+            color: #718096;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--ngjyra-vije);
+            padding-bottom: 5px;
+        }
+
+        .bllok-info p {
+            font-size: 14px;
+            color: #2d3748;
+            line-height: 1.5;
+        }
+
+        /* TABELA E SHËRBIMEVE */
+        .tabela-sherbime {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .tabela-sherbime th {
+            background-color: var(--ngjyra-gri-lehte);
+            color: #4a5568;
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--ngjyra-vije);
+        }
+
+        .tabela-sherbime td {
+            padding: 15px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--ngjyra-vije);
+            color: #2d3748;
+        }
+
+        .tabela-sherbime td.cmimi {
+            text-align: right;
+        }
+
+        .tabela-sherbime th.cmimi {
+            text-align: right;
+        }
+
+        /* TOTALI */
+        .totali-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 50px;
+        }
+
+        .tabela-totali {
+            width: 250px;
+            border-collapse: collapse;
+        }
+
+        .tabela-totali td {
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .tabela-totali tr.vije-totale td {
+            border-top: 2px solid var(--ngjyra-vije);
+        }
+
+        .tabela-totali tr.shuma-finale td {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--ngjyra-primare);
+            background-color: var(--ngjyra-gri-lehte);
+            border-radius: 4px;
+        }
+
+        /* FOOTER / FALËNDERIMI */
+        .fatura-footer {
+            text-align: center;
+            border-top: 1px solid var(--ngjyra-vije);
+            padding-top: 20px;
+            margin-top: 40px;
+        }
+
+        .fatura-footer p {
+            font-size: 15px;
+            color: #4a5568;
+            font-style: italic;
+        }
+
+        .fatura-footer .NUI {
+            font-size: 11px;
+            color: #a0aec0;
+            margin-top: 10px;
+            font-style: normal;
+        }
+
+        /* OPTIMIZIMI PËR PRINTIM (Kompjuteri e fsheh sfondin gri kur printohet) */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
+            }
+            .fatura-container {
+                box-shadow: none;
+                padding: 20px;
+                border-top: none;
+            }
+            .titull-fature h2, .tabela-totali tr.shuma-finale td {
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="fatura-container">
+        
+        <!-- KREU -->
+        <div class="fatura-header">
+            <div class="logo-biznesi">
+                <h1>Autolarja <span>ANDI</span></h1>
+                <p>
+                    Rruga Kryesore, Qyteti Juaj<br>
+                    Tel: +383 4X XXX XXX / +355 6X XXX XXX<br>
+                    Email: info@autolarjaandi.com
+                </p>
+            </div>
+            <div class="titull-fature">
+                <h2>FATURË</h2>
+                <p><strong>Numri:</strong> #00241</p>
+                <p><strong>Data:</strong> 26/06/2026</p>
+            </div>
+        </div>
+
+        <!-- INFO KLIENTI & KOPETENCA -->
+        <div class="fatura-detaje">
+            <div class="bllok-info">
+                <h3>Faturuar Për:</h3>
+                <p>
+                    <strong>Emri i Klientit:</strong> Filan Fisteku<br>
+                    <strong>Mjeti:</strong> Volkswagen Golf 8<br>
+                    <strong>Targa:</strong> 01-123-AB
+                </p>
+            </div>
+            <div class="bllok-info" style="text-align: right;">
+                <!-- Mund të shtohet diçka tjetër si Metoda e Pagesës -->
+                <h3>Metoda e Pagesës:</h3>
+                <p>Kesh (Para në dorë)</p>
+            </div>
+        </div>
+
+        <!-- TABELA E SHËRBIMEVE -->
+        <table class="tabela-sherbime">
+            <thead>
+                <tr>
+                    <th>Përshkrimi i Shërbimit</th>
+                    <th style="text-align: center; width: 80px;">Sasia</th>
+                    <th class="cmimi" style="width: 120px;">Çmimi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Larje Premium (E jashtme + E brendshme + Dyllë)</td>
+                    <td style="text-align: center;">1</td>
+                    <td class="cmimi">10.00 €</td>
+                </tr>
+                <tr>
+                    <td>Pastrim i thellë i tepihave</td>
+                    <td style="text-align: center;">1</td>
+                    <td class="cmimi">5.00 €</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- llogaritja e TOTALIT -->
+        <div class="totali-container">
+            <table class="tabela-totali">
+                <tr>
+                    <td>Nëntotali:</td>
+                    <td style="text-align: right;">15.00 €</td>
+                </tr>
+                <tr>
+                    <td>TVSH (0%):</td>
+                    <td style="text-align: right;">0.00 €</td>
+                </tr>
+                <tr class="vije-totale shuma-finale">
+                    <td>TOTALI:</td>
+                    <td style="text-align: right;">15.00 €</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="fatura-footer">
+            <p>Ju faleminderit për besimin tuaj!</p>
+            <p class="NUI">Autolarja ANDI | Numri Unik Identifikues (NUI): XXXXXXXXX</p>
+        </div>
+
+    </div>
+
+</body>
+</html>
