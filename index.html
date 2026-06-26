@@ -3,427 +3,354 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autolarja ANDI | Shkëlqim dhe Kujdes për Makinën Tuaj</title>
+    <title>Sistemi i Faturimit - Autolarja ANDI</title>
     <style>
-        /* RESET & VARIABLAT KRYESORE */
+        :root {
+            --ngjyra-primare: #007bff;
+            --ngjyra-tekst: #2d3748;
+            --ngjyra-gri-lehte: #f8f9fa;
+            --ngjyra-vije: #e2e8f0;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            scroll-behavior: smooth;
-        }
-
-        :root {
-            --ngjyra-kryesore: #007bff; /* Blu moderne */
-            --ngjyra-erret: #11141a; /* Sfondi i errët */
-            --ngjyra-kortezi: #1e232d; /* Karta dhe seksione */
-            --ngjyra-tekst: #ffffff;
-            --ngjyra-tekst-gri: #a0aec0;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
 
         body {
-            background-color: var(--ngjyra-erret);
+            background-color: #f0f2f5;
             color: var(--ngjyra-tekst);
-            line-height: 1.6;
+            padding: 30px 15px;
         }
 
-        /* NAVIGACIONI (MENUJA) */
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
+        /* PANELI I PLOTËSIMIT (Fshihet gjatë printimit) */
+        .paneli-kontrollit {
+            max-width: 800px;
+            margin: 0 auto 30px auto;
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .paneli-kontrollit h2 {
+            margin-bottom: 20px;
+            color: var(--ngjyra-primare);
+            font-size: 20px;
+            border-bottom: 2px solid var(--ngjyra-vije);
+            padding-bottom: 10px;
+        }
+
+        .rresht-input {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .grup-input {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .grup-input label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #4a5568;
+        }
+
+        .grup-input input, .grup-input select {
             width: 100%;
-            background-color: rgba(17, 20, 26, 0.95);
-            padding: 20px 10px;
-            z-index: 1000;
-            border-bottom: 1px solid #2d3748;
+            padding: 10px;
+            border: 1px solid #cbd5e0;
+            border-radius: 5px;
+            outline: none;
+            font-size: 14px;
         }
 
-        .nav-container {
-            max-width: 1200px;
+        .grup-input input:focus {
+            border-color: var(--ngjyra-primare);
+        }
+
+        .btn-printo {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-printo:hover {
+            background-color: #218838;
+        }
+
+        /* STRUKTURA E FATURËS (Formati A4) */
+        .fatura-container {
+            max-width: 800px;
             margin: 0 auto;
+            background: #ffffff;
+            padding: 50px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border-top: 8px solid var(--ngjyra-primare);
+        }
+
+        .fatura-header {
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--ngjyra-vije);
+            padding-bottom: 20px;
         }
 
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--ngjyra-tekst);
-            letter-spacing: 1px;
-        }
-
-        .logo span {
-            color: var(--ngjyra-kryesore);
-        }
-
-        .menu a {
-            color: var(--ngjyra-tekst-gri);
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: 500;
-            transition: 0.3s;
-        }
-
-        .menu a:hover {
-            color: var(--ngjyra-kryesore);
-        }
-
-        /* SEKSIONI KRYESOR (HERO) */
-        .hero {
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 0 20px;
-            background: linear-gradient(rgba(17, 20, 26, 0.8), rgba(17, 20, 26, 0.9)), 
-                        url('https://images.unsplash.com/photo-1607860108855-64acf2078ed9?q=80&w=1200') no-repeat center center/cover;
-        }
-
-        .hero-content h1 {
-            font-size: 48px;
-            margin-bottom: 20px;
+        .logo-biznesi h1 {
+            font-size: 28px;
+            color: #1a202c;
             text-transform: uppercase;
         }
 
-        .hero-content p {
-            font-size: 18px;
-            color: var(--ngjyra-tekst-gri);
-            margin-bottom: 30px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
+        .logo-biznesi h1 span {
+            color: var(--ngjyra-primare);
         }
 
-        .btn {
-            display: inline-block;
-            background-color: var(--ngjyra-kryesore);
-            color: white;
-            padding: 12px 30px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: 0.3s ease;
+        .logo-biznesi p {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 5px;
+            line-height: 1.4;
         }
 
-        .btn:hover {
-            background-color: #0056b3;
-            transform: translateY(-2px);
+        .titull-fature {
+            text-align: right;
         }
 
-        /* SEKSIONET E PËRGJITHSHME */
-        section {
-            padding: 80px 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .section-title {
-            text-align: center;
+        .titull-fature h2 {
             font-size: 32px;
-            margin-bottom: 50px;
-            position: relative;
+            color: var(--ngjyra-primare);
+            text-transform: uppercase;
+            margin-bottom: 5px;
         }
 
-        .section-title::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background-color: var(--ngjyra-kryesore);
-            margin: 10px auto 0 auto;
-            border-radius: 2px;
-        }
-
-        /* SHËRBIMET */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .service-card {
-            background-color: var(--ngjyra-kortezi);
-            padding: 30px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #2d3748;
-            transition: 0.3s;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            border-color: var(--ngjyra-kryesore);
-        }
-
-        .service-icon {
-            font-size: 40px;
-            margin-bottom: 15px;
-        }
-
-        .service-card h3 {
-            margin-bottom: 15px;
-            color: #fff;
-        }
-
-        .service-card p {
-            color: var(--ngjyra-tekst-gri);
+        .titull-fature p {
             font-size: 14px;
+            color: #4a5568;
         }
 
-        /* ÇMIMET */
-        .price-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .price-card {
-            background-color: var(--ngjyra-kortezi);
-            padding: 40px 30px;
-            border-radius: 8px;
-            text-align: center;
-            border: 1px solid #2d3748;
-            position: relative;
-        }
-
-        .price-card.popular {
-            border-color: var(--ngjyra-kryesore);
-        }
-
-        .badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background-color: var(--ngjyra-kryesore);
-            color: white;
-            padding: 3px 10px;
-            font-size: 12px;
-            border-radius: 20px;
-            font-weight: bold;
-        }
-
-        .price {
-            font-size: 36px;
-            font-weight: bold;
-            color: var(--ngjyra-kryesore);
-            margin: 20px 0;
-        }
-
-        .price-card ul {
-            list-style: none;
-            margin-bottom: 30px;
-            color: var(--ngjyra-tekst-gri);
-        }
-
-        .price-card ul li {
-            margin-bottom: 10px;
-        }
-
-        /* KONTAKTI & REZERVIMET */
-        .contact-container {
+        .fatura-detaje {
             display: flex;
-            flex-wrap: wrap;
-            gap: 50px;
-            background-color: var(--ngjyra-kortezi);
-            padding: 40px;
-            border-radius: 8px;
-            border: 1px solid #2d3748;
+            justify-content: space-between;
+            margin-bottom: 40px;
         }
 
-        .contact-info, .contact-form {
-            flex: 1;
-            min-width: 280px;
-        }
-
-        .contact-info h3, .contact-form h3 {
-            margin-bottom: 20px;
-        }
-
-        .info-item {
-            margin-bottom: 20px;
-        }
-
-        .info-item p strong {
-            color: var(--ngjyra-kryesore);
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--ngjyra-erret);
-            border: 1px solid #2d3748;
-            color: white;
-            border-radius: 5px;
-            outline: none;
-        }
-
-        .form-group input:focus, .form-group textarea:focus {
-            border-color: var(--ngjyra-kryesore);
-        }
-
-        /* FOOTER */
-        footer {
-            background-color: #0b0d11;
-            text-align: center;
-            padding: 30px;
-            color: var(--ngjyra-tekst-gri);
+        .bllok-info h3 {
             font-size: 14px;
-            border-top: 1px solid #2d3748;
+            text-transform: uppercase;
+            color: #718096;
+            margin-bottom: 10px;
+            border-bottom: 1px solid var(--ngjyra-vije);
+            padding-bottom: 5px;
         }
 
-        /* RESPONSIVE (CELULARËT) */
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                gap: 15px;
+        .bllok-info p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .tabela-sherbime {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        .tabela-sherbime th {
+            background-color: var(--ngjyra-gri-lehte);
+            color: #4a5568;
+            text-align: left;
+            padding: 12px 15px;
+            font-size: 14px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--ngjyra-vije);
+        }
+
+        .tabela-sherbime td {
+            padding: 15px;
+            font-size: 14px;
+            border-bottom: 1px solid var(--ngjyra-vije);
+        }
+
+        .totali-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 40px;
+        }
+
+        .tabela-totali {
+            width: 250px;
+            border-collapse: collapse;
+        }
+
+        .tabela-totali td {
+            padding: 10px 15px;
+            font-size: 14px;
+        }
+
+        .shuma-finale td {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--ngjyra-primare);
+            background-color: var(--ngjyra-gri-lehte);
+        }
+
+        .fatura-footer {
+            text-align: center;
+            border-top: 1px solid var(--ngjyra-vije);
+            padding-top: 20px;
+            font-size: 14px;
+            color: #4a5568;
+        }
+
+        /* RREGULLAT E PRINTIMIT (Fsheh gjithçka përveç faturës) */
+        @media print {
+            body {
+                background-color: #fff;
+                padding: 0;
             }
-            .menu {
-                display: flex;
-                flex-wrap: wrap;
-                justify-content: center;
-                gap: 10px;
+            .paneli-kontrollit {
+                display: none; /* Fsheh formularin e plotësimit */
             }
-            .menu a {
-                margin-left: 0;
-                padding: 5px 10px;
+            .fatura-container {
+                box-shadow: none;
+                padding: 0;
+                border-top: none;
+                max-width: 100%;
             }
-            .hero-content h1 {
-                font-size: 32px;
+            .titull-fature h2, .shuma-finale td {
+                color: #000 !important;
             }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="nav-container">
-            <div class="logo">AUTOLARJA <span>ANDI</span></div>
-            <nav class="menu">
-                <a href="#kreu">Kreu</a>
-                <a href="#sherbimet">Shërbimet</a>
-                <a href="#cmimet">Çmimet</a>
-                <a href="#kontakti">Kontakt</a>
-            </nav>
-        </div>
-    </header>
-
-    <section id="kreu" class="hero">
-        <div class="hero-content">
-            <h1>Kujdes Profesional për Makinen Tuaj</h1>
-            <p>Ne ofrojmë larje të detajuar, pastrim kimik dhe trajtim profesional që makina juaj të shkëlqejë si ditën e parë.</p>
-            <a href="#kontakti" class="btn">Rezervo Terminin</a>
-        </div>
-    </section>
-
-    <section id="sherbimet">
-        <h2 class="section-title">Shërbimet Tona</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <div class="service-icon">🧽</div>
-                <h3>Larje e Jashtme</h3>
-                <p>Larje me shkumë aktive, pastrim i disqeve dhe tharje e detajuar me peshqirë mikrofibër.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">🧹</div>
-                <h3>Pastrim i Brendshëm</h3>
-                <p>Thithje e pluhurit në detaje, pastrim i kroskotit, xhamave dhe aromatizim i ambientit.</p>
-            </div>
-            <div class="service-card">
-                <div class="service-icon">✨</div>
-                <h3>Pastrim Kimik</h3>
-                <p>Larje e thellë e ulëseve, tavanit dhe tepihave me makineri profesionale për largimin e njollave.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="cmimet">
-        <h2 class="section-title">Paketat e Çmimeve</h2>
-        <div class="price-grid">
-            <div class="price-card">
-                <h3>Larje Standard</h3>
-                <div class="price">5€</div>
-                <ul>
-                    <li>Larje e jashtme</li>
-                    <li>Fshirje e brendshme</li>
-                    <li>Gomat me shkëlqim</li>
-                </ul>
-                <a href="#kontakti" class="btn">Zgjidh</a>
-            </div>
-            <div class="price-card popular">
-                <div class="badge">Më e Populluara</div>
-                <h3>Larje Premium</h3>
-                <div class="price">10€</div>
-                <ul>
-                    <li>Larje Standard + Wax (Dyllë)</li>
-                    <li>Pastrim i thellë i tepihave</li>
-                    <li>Dezinfektim i AC</li>
-                </ul>
-                <a href="#kontakti" class="btn">Zgjidh</a>
-            </div>
-            <div class="price-card">
-                <h3>Pastrim Kimik</h3>
-                <div class="price">40€</div>
-                <ul>
-                    <li>Larje e plotë e ulëseve</li>
-                    <li>Pastrim i tavanit & dyshemesë</li>
-                    <li>Kujdes për lëkurën/mbrojtje</li>
-                </ul>
-                <a href="#kontakti" class="btn">Zgjidh</a>
-            </div>
-        </div>
-    </section>
-
-    <section id="kontakti">
-        <h2 class="section-title">Na Kontaktoni</h2>
-        <div class="contact-container">
-            <div class="contact-info">
-                <h3>Lokacioni dhe Orari</h3>
-                <div class="info-item">
-                    <p><strong>Adresa:</strong> Rruga Kryesore, Qyteti Juaj</p>
+    <div class="paneli-kontrollit">
+        <h2>Menaxhimi i Faturës - Autolarja ANDI</h2>
+        <form id="formaFatures">
+            <div class="rresht-input">
+                <div class="grup-input">
+                    <label>Emri i Klientit</label>
+                    <input type="text" id="inputEmri" placeholder="Filan Fisteku" required>
                 </div>
-                <div class="info-item">
-                    <p><strong>Telefoni:</strong> +383 4X XXX XXX / +355 6X XXX XXX</p>
+                <div class="grup-input">
+                    <label>Mjeti / Modeli</label>
+                    <input type="text" id="inputMjeti" placeholder="Golf 8" required>
                 </div>
-                <div class="info-item">
-                    <p><strong>Orari:</strong> Hënë - Shtunë: 08:00 - 20:00</p>
+                <div class="grup-input">
+                    <label>Targa</label>
+                    <input type="text" id="inputTarga" placeholder="01-123-AB" required>
                 </div>
             </div>
-            <div class="contact-form">
-                <h3>Dërgo Mesazh / Rezervo</h3>
-                <form id="formularizimi">
-                    <div class="form-group">
-                        <input type="text" id="emri" placeholder="Emri Juaj" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="tel" id="telefoni" placeholder="Numri i Telefonit" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea id="mesazhi" rows="4" placeholder="Zgjidhni shërbimin ose shkruani mesazhin tuaj..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn" style="border: none; width: 100%; cursor: pointer;">Dërgo</button>
-                </form>
+
+            <div class="rresht-input">
+                <div class="grup-input">
+                    <label>Shërbimi Kryesor</label>
+                    <select id="inputSherbimi" required>
+                        <option value="Larje Standard" data-cmimi="5">Larje Standard (5.00 €)</option>
+                        <option value="Larje Premium" data-cmimi="10">Larje Premium (10.00 €)</option>
+                        <option value="Pastrim Kimik" data-cmimi="40">Pastrim Kimik (40.00 €)</option>
+                        <option value="Larje Motori" data-cmimi="15">Larje Motori (15.00 €)</option>
+                    </select>
+                </div>
+                <div class="grup-input">
+                    <label>Shërbim Shtesë (Opsionale)</label>
+                    <select id="inputShtese">
+                        <option value="Asgjë" data-cmimi="0">-- Pa shtesë --</option>
+                        <option value="Dyllë (Wax) ekstra" data-cmimi="3">Dyllë Ekstra (+3.00 €)</option>
+                        <option value="Pastrim Tepihash" data-cmimi="5">Pastrim Tepihash (+5.00 €)</option>
+                        <option value="Krem për Ulëse lëkure" data-cmimi="10">Krem Lëkure (+10.00 €)</option>
+                    </select>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-printo">Printo / Ruaj si PDF</button>
+        </form>
+    </div>
+
+
+    <div class="fatura-container" id="faturaShtypje">
+        
+        <div class="fatura-header">
+            <div class="logo-biznesi">
+                <h1>Autolarja <span>ANDI</span></h1>
+                <p>
+                    Rruga Kryesore, Qyteti Juaj<br>
+                    Tel: +383 4X XXX XXX<br>
+                    Email: info@autolarjaandi.com
+                </p>
+            </div>
+            <div class="titull-fature">
+                <h2>FATURË</h2>
+                <p><strong>Numri:</strong> <span id="fatNumri">#------</span></p>
+                <p><strong>Data:</strong> <span id="fatData">--/--/----</span></p>
             </div>
         </div>
-    </section>
 
-    <footer>
-        <p>&copy; 2026 AUTOLARJA ANDI. Të gjitha të drejtat e rezervuara.</p>
-    </footer>
+        <div class="fatura-detaje">
+            <div class="bllok-info">
+                <h3>Faturuar Për:</h3>
+                <p>
+                    <strong>Klienti:</strong> <span id="fatKlanti">------</span><br>
+                    <strong>Mjeti:</strong> <span id="fatMjeti">------</span><br>
+                    <strong>Targa:</strong> <span id="fatTarga">------</span>
+                </p>
+            </div>
+            <div class="bllok-info" style="text-align: right;">
+                <h3>Mënyra e Pagesës:</h3>
+                <p>Kesh (Para në dorë)</p>
+            </div>
+        </div>
+
+        <table class="tabela-sherbime">
+            <thead>
+                <tr>
+                    <th>Përshkrimi i Shërbimit</th>
+                    <th style="text-align: right; width: 150px;">Çmimi</th>
+                </tr>
+            </thead>
+            <tbody id="tabelaTrupi">
+                </tbody>
+        </table>
+
+        <div class="totali-container">
+            <table class="tabela-totali">
+                <tr class="shuma-finale">
+                    <td>TOTALI:</td>
+                    <td style="text-align: right; font-weight: bold;" id="fatTotali">0.00 €</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="fatura-footer">
+            <p>Ju faleminderit për besimin tuaj!</p>
+        </div>
+    </div>
+
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-analytics.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        // Konfigurimi i Firebase nga projekti juaj
+        // Konfigurimi juaj ekzistues i Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyD-fIBnkBJonx0CPeN8yFA-FEt3gY8qHGc",
             authDomain: "andibuqinca-6424a.firebaseapp.com",
@@ -434,36 +361,71 @@
             measurementId: "G-1YZG490YSL"
         };
 
-        // Inicializimi i aplikacionit
         const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
         const db = getFirestore(app);
 
-        // Funksioni për kapjen e formularit dhe dërgimin në Firestore
-        document.getElementById('formularizimi').addEventListener('submit', async (e) => {
+        // Vendos datën e sotme automatikisht te fatura në ekran
+        const sot = new Date();
+        document.getElementById('fatData').innerText = sot.toLocaleDateString('sq-AL');
+        
+        // Gjeneron një numër fature të rastësishëm për pamje profesionale
+        const nrRastesishem = Math.floor(10000 + Math.random() * 90000);
+        document.getElementById('fatNumri').innerText = "#" + nrRastesishem;
+
+        // Kur klikoni butonin për të lëshuar faturën
+        document.getElementById('formaFatures').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const emri = document.getElementById('emri').value;
-            const telefoni = document.getElementById('telefoni').value;
-            const mesazhi = document.getElementById('mesazhi').value;
+            // 1. Merr vlerat nga fushat që plotësuat ju
+            const emri = document.getElementById('inputEmri').value;
+            const mjeti = document.getElementById('inputMjeti').value;
+            const targa = document.getElementById('inputTarga').value;
+            
+            const selectSherbimi = document.getElementById('inputSherbimi');
+            const emriSherbimit = selectSherbimi.value;
+            const cmimiSherbimit = parseFloat(selectSherbimi.options[selectSherbimi.selectedIndex].getAttribute('data-cmimi'));
 
+            const selectShtese = document.getElementById('inputShtese');
+            const emriShtese = selectShtese.value;
+            const cmimiShtese = parseFloat(selectShtese.options[selectShtese.selectedIndex].getAttribute('data-cmimi'));
+
+            const totaliAritmetik = cmimiSherbimit + cmimiShtese;
+
+            // 2. Ndrysho tekstet në faturën e printueshme poshtë
+            document.getElementById('fatKlanti').innerText = emri;
+            document.getElementById('fatMjeti').innerText = mjeti;
+            document.getElementById('fatTarga').innerText = targa;
+
+            // Ndërto tabelën e faturës dinamikisht
+            let HTMLTabela = `<tr><td>${emriSherbimit}</td><td style="text-align: right;">${cmimiSherbimit.toFixed(2)} €</td></tr>`;
+            if (cmimiShtese > 0) {
+                HTMLTabela += `<tr><td>${emriShtese}</td><td style="text-align: right;">+${cmimiShtese.toFixed(2)} €</td></tr>`;
+            }
+            document.getElementById('tabelaTrupi').innerHTML = HTMLTabela;
+            document.getElementById('fatTotali').innerText = totaliAritmetik.toFixed(2) + " €";
+
+            // 3. RUAJTJA NË FIREBASE (Do të krijojë një koleksion me emrin "faturat")
             try {
-                // Krijon ose shton të dhënat në koleksionin "rezervimet"
-                await addDoc(collection(db, "rezervimet"), {
+                await addDoc(collection(db, "faturat"), {
+                    numriFatures: nrRastesishem,
                     klienti: emri,
-                    NrTelefonit: telefoni,
-                    porosia: mesazhi,
-                    data: new Date().toISOString()
+                    makina: mjeti,
+                    targa: targa,
+                    sherbimi: emriSherbimit,
+                    shtese: emriShtese,
+                    shumaTotale: totaliAritmetik,
+                    dataLeshimit: sot.toISOString()
                 });
-
-                alert("Rezervimi u dërgua me sukses! Do t'ju kontaktojmë së shpejti.");
-                document.getElementById('formularizimi').reset();
-            } catch (error) {
-                console.error("Gabim gjatë dërgimit: ", error);
-                alert("Ndodhi një gabim gjatë dërgimit. Ju lutem provoni përsëri.");
+                
+                // Hap dritaren e printimit të sistemit (ku mund të zgjidhni edhe "Save as PDF")
+                window.print();
+                
+            </div> catch (gabimi) {
+                console.error("Fatura nuk u ruajt në databazë: ", gabimi);
+                // Edhe nëse ka gabim në rrjet me Firebase, prapë lejoje printimin
+                window.print();
             }
         });
     </script>
-
 </body>
 </html>
