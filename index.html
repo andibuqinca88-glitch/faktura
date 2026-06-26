@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistemi i Faturimit - Autolarja ANDI</title>
+    <title>Sistemi i Faturimit të Personalizuar - Autolarja ANDI</title>
     <style>
         :root {
             --ngjyra-primare: #007bff;
@@ -25,7 +25,7 @@
             padding: 30px 15px;
         }
 
-        /* PANELI I PLOTËSIMIT (Fshihet gjatë printimit) */
+        /* PANELI I INPUTEVE (Fshihet gjatë printimit) */
         .paneli-kontrollit {
             max-width: 800px;
             margin: 0 auto 30px auto;
@@ -63,7 +63,7 @@
             color: #4a5568;
         }
 
-        .grup-input input, .grup-input select {
+        .grup-input input {
             width: 100%;
             padding: 10px;
             border: 1px solid #cbd5e0;
@@ -74,6 +74,28 @@
 
         .grup-input input:focus {
             border-color: var(--ngjyra-primare);
+        }
+
+        /* DINAMIKA E SHËRBIMEVE VETË-STILUAR */
+        .titull-sherbime-input {
+            font-size: 14px;
+            font-weight: bold;
+            margin: 20px 0 10px 0;
+            color: #4a5568;
+        }
+
+        .rresht-sherbimi {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .input-pershkrimi {
+            flex: 3;
+        }
+
+        .input-cmimi {
+            flex: 1;
         }
 
         .btn-printo {
@@ -87,7 +109,7 @@
             cursor: pointer;
             width: 100%;
             transition: 0.2s;
-            margin-top: 10px;
+            margin-top: 20px;
         }
 
         .btn-printo:hover {
@@ -220,14 +242,25 @@
             color: #4a5568;
         }
 
-        /* RREGULLAT E PRINTIMIT (Fsheh gjithçka përveç faturës) */
+        /* LLOGARITËSI LIVE I TOTALIT NË PANEL */
+        .live-total-paneli {
+            background: #e2e8f0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 16px;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        /* RREGULLAT E PRINTIMIT (Fsheh formularët plotësues) */
         @media print {
             body {
                 background-color: #fff;
                 padding: 0;
             }
             .paneli-kontrollit {
-                display: none; /* Fsheh formularin e plotësimit */
+                display: none;
             }
             .fatura-container {
                 box-shadow: none;
@@ -243,43 +276,47 @@
 </head>
 <body>
 
+    <!-- 1. PANELI I PLOTËSIMIT MANUAL -->
     <div class="paneli-kontrollit">
-        <h2>Menaxhimi i Faturës - Autolarja ANDI</h2>
+        <h2>Krijo Faturë të Re - Autolarja ANDI</h2>
         <form id="formaFatures">
             <div class="rresht-input">
                 <div class="grup-input">
                     <label>Emri i Klientit</label>
-                    <input type="text" id="inputEmri" placeholder="Filan Fisteku" required>
+                    <input type="text" id="inputEmri" placeholder="Psh. Filan Fisteku" required>
                 </div>
                 <div class="grup-input">
                     <label>Mjeti / Modeli</label>
-                    <input type="text" id="inputMjeti" placeholder="Golf 8" required>
+                    <input type="text" id="inputMjeti" placeholder="Psh. Golf 7" required>
                 </div>
                 <div class="grup-input">
                     <label>Targa</label>
-                    <input type="text" id="inputTarga" placeholder="01-123-AB" required>
+                    <input type="text" id="inputTarga" placeholder="Psh. 01-123-AB" required>
                 </div>
             </div>
 
-            <div class="rresht-input">
-                <div class="grup-input">
-                    <label>Shërbimi Kryesor</label>
-                    <select id="inputSherbimi" required>
-                        <option value="Larje Standard" data-cmimi="5">Larje Standard (5.00 €)</option>
-                        <option value="Larje Premium" data-cmimi="10">Larje Premium (10.00 €)</option>
-                        <option value="Pastrim Kimik" data-cmimi="40">Pastrim Kimik (40.00 €)</option>
-                        <option value="Larje Motori" data-cmimi="15">Larje Motori (15.00 €)</option>
-                    </select>
-                </div>
-                <div class="grup-input">
-                    <label>Shërbim Shtesë (Opsionale)</label>
-                    <select id="inputShtese">
-                        <option value="Asgjë" data-cmimi="0">-- Pa shtesë --</option>
-                        <option value="Dyllë (Wax) ekstra" data-cmimi="3">Dyllë Ekstra (+3.00 €)</option>
-                        <option value="Pastrim Tepihash" data-cmimi="5">Pastrim Tepihash (+5.00 €)</option>
-                        <option value="Krem për Ulëse lëkure" data-cmimi="10">Krem Lëkure (+10.00 €)</option>
-                    </select>
-                </div>
+            <p class="titull-sherbime-input">Shkruaj Shërbimet dhe Çmimet:</p>
+            
+            <!-- Rreshti 1 -->
+            <div class="rresht-sherbimi">
+                <input type="text" class="input-pershkrimi" id="sherbimi1" placeholder="Përshkrimi i Shërbimit 1 (Psh. Larje e jashtme)" required>
+                <input type="number" step="0.01" class="input-cmimi" id="cmimi1" placeholder="Çmimi (€)" required>
+            </div>
+
+            <!-- Rreshti 2 -->
+            <div class="rresht-sherbimi">
+                <input type="text" class="input-pershkrimi" id="sherbimi2" placeholder="Përshkrimi i Shërbimit 2 (Opsionale)">
+                <input type="number" step="0.01" class="input-cmimi" id="cmimi2" placeholder="Çmimi (€)">
+            </div>
+
+            <!-- Rreshti 3 -->
+            <div class="rresht-sherbimi">
+                <input type="text" class="input-pershkrimi" id="sherbimi3" placeholder="Përshkrimi i Shërbimit 3 (Opsionale)">
+                <input type="number" step="0.01" class="input-cmimi" id="cmimi3" placeholder="Çmimi (€)">
+            </div>
+
+            <div>
+                <span class="live-total-paneli">Totali Aktual: <span id="liveTotalVlera">0.00</span> €</span>
             </div>
 
             <button type="submit" class="btn-printo">Printo / Ruaj si PDF</button>
@@ -287,6 +324,7 @@
     </div>
 
 
+    <!-- 2. PAMJA E FATURËS PËR PRINTIM OSE PDF -->
     <div class="fatura-container" id="faturaShtypje">
         
         <div class="fatura-header">
@@ -328,7 +366,8 @@
                 </tr>
             </thead>
             <tbody id="tabelaTrupi">
-                </tbody>
+                <!-- Mbushet automatikisht -->
+            </tbody>
         </table>
 
         <div class="totali-container">
@@ -346,11 +385,12 @@
     </div>
 
 
+    <!-- SCRIPT LOGJIK - LLOGARITJA, FIREBASE & SHTYPJE -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
         import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-        // Konfigurimi juaj ekzistues i Firebase
+        // Konfigurimi i Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyD-fIBnkBJonx0CPeN8yFA-FEt3gY8qHGc",
             authDomain: "andibuqinca-6424a.firebaseapp.com",
@@ -364,65 +404,82 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
-        // Vendos datën e sotme automatikisht te fatura në ekran
+        // Vendosja e datës aktuale automatikisht
         const sot = new Date();
         document.getElementById('fatData').innerText = sot.toLocaleDateString('sq-AL');
         
-        // Gjeneron një numër fature të rastësishëm për pamje profesionale
-        const nrRastesishem = Math.floor(10000 + Math.random() * 90000);
-        document.getElementById('fatNumri').innerText = "#" + nrRastesishem;
+        // Numër fature i rastësishëm unique
+        const nrFatures = Math.floor(10000 + Math.random() * 90000);
+        document.getElementById('fatNumri').innerText = "#" + nrFatures;
 
-        // Kur klikoni butonin për të lëshuar faturën
+        // FUNKSIONI: Llogaritja Live e Totali gjatë kohës që ju shkruani çmimet
+        const inputsCmimi = document.querySelectorAll('.input-cmimi');
+        inputsCmimi.forEach(input => {
+            input.addEventListener('input', () => {
+                let totaliLive = 0;
+                inputsCmimi.forEach(i => {
+                    if(i.value) totaliLive += parseFloat(i.value);
+                });
+                document.getElementById('liveTotalVlera').innerText = totaliLive.toFixed(2);
+            });
+        });
+
+        // KUR SHTYPNI BUTONIN "PRINTO / RUAJ SI PDF"
         document.getElementById('formaFatures').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // 1. Merr vlerat nga fushat që plotësuat ju
+            // Merr të dhënat e klientit
             const emri = document.getElementById('inputEmri').value;
             const mjeti = document.getElementById('inputMjeti').value;
             const targa = document.getElementById('inputTarga').value;
-            
-            const selectSherbimi = document.getElementById('inputSherbimi');
-            const emriSherbimit = selectSherbimi.value;
-            const cmimiSherbimit = parseFloat(selectSherbimi.options[selectSherbimi.selectedIndex].getAttribute('data-cmimi'));
 
-            const selectShtese = document.getElementById('inputShtese');
-            const emriShtese = selectShtese.value;
-            const cmimiShtese = parseFloat(selectShtese.options[selectShtese.selectedIndex].getAttribute('data-cmimi'));
-
-            const totaliAritmetik = cmimiSherbimit + cmimiShtese;
-
-            // 2. Ndrysho tekstet në faturën e printueshme poshtë
+            // Ndrysho pamjen e faturës poshtë
             document.getElementById('fatKlanti').innerText = emri;
             document.getElementById('fatMjeti').innerText = mjeti;
             document.getElementById('fatTarga').innerText = targa;
 
-            // Ndërto tabelën e faturës dinamikisht
-            let HTMLTabela = `<tr><td>${emriSherbimit}</td><td style="text-align: right;">${cmimiSherbimit.toFixed(2)} €</td></tr>`;
-            if (cmimiShtese > 0) {
-                HTMLTabela += `<tr><td>${emriShtese}</td><td style="text-align: right;">+${cmimiShtese.toFixed(2)} €</td></tr>`;
-            }
-            document.getElementById('tabelaTrupi').innerHTML = HTMLTabela;
-            document.getElementById('fatTotali').innerText = totaliAritmetik.toFixed(2) + " €";
+            let listaSherbimeveFirebase = [];
+            let trupiTabelesHTML = "";
+            let shumaTotaleFinale = 0;
 
-            // 3. RUAJTJA NË FIREBASE (Do të krijojë një koleksion me emrin "faturat")
+            // Kontrollo rreshtat e shërbimeve dinamikisht
+            for (let index = 1; index <= 3; index++) {
+                const pershkrimi = document.getElementById(`sherbimi${index}`).value;
+                const cmimiVlera = document.getElementById(`cmimi${index}`).value;
+
+                if (pershkrimi && cmimiVlera) {
+                    const cmimiNumer = parseFloat(cmimiVlera);
+                    shumaTotaleFinale += cmimiNumer;
+                    
+                    // Shto rreshtin në tabelën e faturës së printueshme
+                    trupiTabelesHTML += `<tr><td>${pershkrimi}</td><td style="text-align: right;">${cmimiNumer.toFixed(2)} €</td></tr>`;
+                    
+                    // Ruaj për Firebase strukturuar
+                    listaSherbimeveFirebase.push({ pershkrimi: pershkrimi, cmimi: cmimiNumer });
+                }
+            }
+
+            // Vendos trupin e tabelës dhe totalin final në faturë
+            document.getElementById('tabelaTrupi').innerHTML = trupiTabelesHTML;
+            document.getElementById('fatTotali').innerText = shumaTotaleFinale.toFixed(2) + " €";
+
+            // RUAJTJA AUTOMATIKE NË FIREBASE
             try {
                 await addDoc(collection(db, "faturat"), {
-                    numriFatures: nrRastesishem,
+                    numriFatures: nrFatures,
                     klienti: emri,
                     makina: mjeti,
                     targa: targa,
-                    sherbimi: emriSherbimit,
-                    shtese: emriShtese,
-                    shumaTotale: totaliAritmetik,
+                    sherbimet: listaSherbimeveFirebase,
+                    shumaTotale: shumaTotaleFinale,
                     dataLeshimit: sot.toISOString()
                 });
                 
-                // Hap dritaren e printimit të sistemit (ku mund të zgjidhni edhe "Save as PDF")
+                // Hap dritaren e printimit apo ruajtjes si PDF direkt
                 window.print();
-                
-            </div> catch (gabimi) {
-                console.error("Fatura nuk u ruajt në databazë: ", gabimi);
-                // Edhe nëse ka gabim në rrjet me Firebase, prapë lejoje printimin
+            } catch (error) {
+                console.error("Gabim gjatë ruajtjes në Firebase: ", error);
+                // Nëse ka problem me rrjetin, prapë lejohet printimi fizik i faturës
                 window.print();
             }
         });
